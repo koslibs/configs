@@ -1,0 +1,65 @@
+{
+    "name": "@koslibs/configs",
+    "version": "0.0.1",
+    "description": "Tool for api usage within react app",
+    "main": "index.js",
+    "private": false,
+    "license": "MIT",
+    "author": "holypower777",
+    "type": "module",
+    "scripts": {
+        "lint": "npm run lint:js && npm run format:check",
+        "lint:fix": "npm run lint:js --fix && npm run format",
+        "lint:js": "node ./cli/index.mjs js",
+        "format": "node ./cli/index.mjs format",
+        "format:check": "node ./cli/index.mjs format:check",
+        "release": "changeset publish",
+        "release:snapshot": "changeset publish --tag snapshot --no-git-tag",
+        "version-package": "changeset version",
+        "version-package:snapshot": "changeset version --snapshot snapshot"
+    },
+    "bugs": {
+        "url": "https://github.com/koslibs/configs/issues"
+    },
+    "homepage": "https://github.com/koslibs/configs",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/koslibs/configs"
+    },
+    "engines": {
+        "node": ">=22.14.0"
+    },
+    "prettier": "./prettier",
+    "commitlint": {
+        "extends": "./commitlint"
+    },
+    "eslintConfig": {
+        "extends": "./eslint"
+    },
+    "exports": {
+        "./eslint": "./eslint/index.mjs",
+        "./prettier": "./prettier/index.js",
+        "./commitlint": "./commitlint/index.js"
+    },
+    "dependencies": {
+        "@commitlint/cli": "20.3.1",
+        "@commitlint/config-conventional": "20.3.1",
+        "@eslint/eslintrc": "3.3.1",
+        "@eslint/js": "9.36.0",
+        "eslint": "9.36.0",
+        "eslint-config-prettier": "10.1.8",
+        "eslint-plugin-import-helpers": "2.0.1",
+        "eslint-plugin-prettier": "5.5.4",
+        "eslint-plugin-storybook": "0.11.2",
+        "globals": "16.4.0",
+        "lefthook": "2.0.13",
+        "prettier": "3.6.2",
+        "typescript": "5.7.2",
+        "typescript-eslint": "8.44.0"
+    },
+    "devDependencies": {
+        "@changesets/changelog-github": "^0.5.2",
+        "@changesets/cli": "^2.29.8",
+        "@types/node": "^24.4.0"
+    }
+}
