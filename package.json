@@ -1,6 +1,6 @@
 {
     "name": "@koslibs/configs",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "Tool for api usage within react app",
     "main": "index.js",
     "private": false,
