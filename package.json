@@ -7,15 +7,28 @@
     "license": "MIT",
     "author": "holypower777",
     "type": "module",
+    "files": [
+        "cli",
+        "commitlint",
+        "eslint",
+        "playwright",
+        "prettier",
+        "shared",
+        "tsconfig",
+        "vite",
+        "index.js",
+        "eslint.config.mjs",
+        "LICENSE"
+    ],
     "bin": {
-        "koslibs-lint": "./cli/lint.mjs"
+        "koslibs-lint": "cli/lint.js"
     },
     "scripts": {
         "lint": "npm run lint:js && npm run format:check",
         "lint:fix": "npm run lint:js --fix && npm run format",
-        "lint:js": "node ./cli/lint.mjs js",
-        "format": "node ./cli/lint.mjs format",
-        "format:check": "node ./cli/lint.mjs format:check",
+        "lint:js": "node ./cli/lint.js js",
+        "format": "node ./cli/lint.js format",
+        "format:check": "node ./cli/lint.js format:check",
         "release": "changeset publish",
         "release:snapshot": "changeset publish --tag snapshot --no-git-tag",
         "version-package": "changeset version",
@@ -28,7 +41,10 @@
     "homepage": "https://github.com/koslibs/configs",
     "repository": {
         "type": "git",
-        "url": "https://github.com/koslibs/configs"
+        "url": "git+https://github.com/koslibs/configs.git"
+    },
+    "publishConfig": {
+        "access": "public"
     },
     "engines": {
         "node": ">=22.14.0"
