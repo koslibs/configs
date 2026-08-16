@@ -1,74 +1,48 @@
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
-import prettier from 'eslint-plugin-prettier';
 import eslintConfigPrettier from 'eslint-config-prettier';
-import tseslint from 'typescript-eslint';
 import importPlugin from 'eslint-plugin-import-helpers';
-import { defineConfig, globalIgnores } from 'eslint/config';
+import prettier from 'eslint-plugin-prettier';
 import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all,
-});
+import { globalIgnores } from './config.mjs';
 
-export default defineConfig([
-    globalIgnores(['**/node_modules', '**/wailsjs', '**/dist', '**/vite.config.ts', '**/.cache']),
-    js.configs.recommended,
-    tseslint.configs.recommended,
+const ignores = ['**/node_modules', '**/wailsjs', '**/dist', '**/.cache', '**/*.json'];
+const files = ['**/*.{ts,tsx,js,jsx,mjs,cjs}'];
+const prettierFiles = ['**/*.{ts,tsx,js,jsx,mjs,cjs,json}'];
+
+export const baseEslintConfig = [
+    globalIgnores(ignores),
     {
-        files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.mjs', '**/*.cjs'],
-
-        extends: compat.extends(
-            'plugin:@typescript-eslint/recommended',
-            'plugin:storybook/recommended'
-        ),
-
+        ...js.configs.recommended,
+        files,
+    },
+    ...tseslint.configs.recommended.map((config) => ({
+        ...config,
+        files: config.files ?? files,
+    })),
+    {
+        files,
         languageOptions: {
             globals: {
                 ...globals.node,
                 ...globals.browser,
                 Controller: 'readonly',
             },
-
             parser: tsParser,
             ecmaVersion: 'latest',
             sourceType: 'module',
-
             parserOptions: {
                 ecmaFeatures: {
                     jsx: true,
                 },
                 sourceType: 'module',
-                project: '../tsconfig/index.json',
-                tsconfigRootDir: __dirname,
             },
         },
-
         plugins: {
-            // @ts-ignore
             'import-helpers': importPlugin,
-            js,
         },
-
-        settings: {
-            react: {
-                version: 'detect',
-            },
-            'import/resolver': {
-                typescript: {
-                    alwaysTryTypes: true,
-                },
-            },
-        },
-
         rules: {
             'import-helpers/order-imports': [
                 'error',
@@ -78,7 +52,6 @@ export default defineConfig([
                     alphabetize: { order: 'asc', ignoreCase: true },
                 },
             ],
-
             'no-restricted-imports': [
                 'error',
                 {
@@ -119,11 +92,9 @@ export default defineConfig([
                                 'vm',
                                 'zlib',
                             ],
-
                             message: 'Use prefix node: for node packages',
                         },
                     ],
-
                     paths: [
                         {
                             name: 'node:assert',
@@ -142,14 +113,12 @@ export default defineConfig([
             '@typescript-eslint/ban-ts-ignore': 'off',
             '@typescript-eslint/ban-ts-comment': 'off',
             '@typescript-eslint/no-explicit-any': 'error',
-
             '@typescript-eslint/no-empty-function': [
                 'error',
                 {
                     allow: ['arrowFunctions'],
                 },
             ],
-
             '@typescript-eslint/no-unused-vars': [
                 'error',
                 {
@@ -159,25 +128,12 @@ export default defineConfig([
                     caughtErrorsIgnorePattern: '^error',
                 },
             ],
-
-            // '@typescript-eslint/ban-types': [
-            //     'error',
-            //     {
-            //         extendDefaults: true,
-
-            //         types: {
-            //             '{}': false,
-            //         },
-            //     },
-            // ],
-
             '@typescript-eslint/consistent-type-imports': [
                 'error',
                 {
                     fixStyle: 'inline-type-imports',
                 },
             ],
-
             'no-cond-assign': 'error',
             'no-control-regex': 'error',
             'no-debugger': 'error',
@@ -195,7 +151,6 @@ export default defineConfig([
             'no-unreachable': 'error',
             'no-unreachable-loop': 'error',
             'no-var': 'error',
-
             'no-multiple-empty-lines': [
                 'error',
                 {
@@ -203,16 +158,13 @@ export default defineConfig([
                     maxEOF: 1,
                 },
             ],
-
             'no-unsafe-negation': 'error',
-
             'no-console': [
                 'error',
                 {
                     allow: ['info', 'error'],
                 },
             ],
-
             'no-use-before-define': 'off',
             'no-shadow': 'off',
             'no-const-assign': 'error',
@@ -266,7 +218,6 @@ export default defineConfig([
             quotes: ['error', 'single'],
             'object-curly-spacing': [1, 'always'],
             'default-case': 'error',
-
             'comma-dangle': [
                 'error',
                 {
@@ -277,20 +228,16 @@ export default defineConfig([
                     objects: 'always-multiline',
                 },
             ],
-
             'max-params': [2, 6],
             'max-nested-callbacks': ['error', 3],
             'brace-style': 'error',
-
             camelcase: [
                 'error',
                 {
                     properties: 'never',
                 },
             ],
-
             'new-parens': 'error',
-
             'max-len': [
                 'error',
                 {
@@ -306,11 +253,12 @@ export default defineConfig([
         },
     },
     {
-        files: ['**/*.ts', '**/*.tsx'],
+        files: prettierFiles,
         plugins: {
             prettier,
-            // @ts-ignore
-            rules: [
+        },
+        rules: {
+            'prettier/prettier': [
                 'error',
                 {
                     trailingComma: 'es5',
@@ -325,4 +273,6 @@ export default defineConfig([
         },
     },
     eslintConfigPrettier,
-]);
+];
+
+export default baseEslintConfig;

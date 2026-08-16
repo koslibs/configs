@@ -2,17 +2,20 @@
     "name": "@koslibs/configs",
     "version": "0.1.0",
     "description": "Tool for api usage within react app",
-    "main": "index.js",
+    "main": "./index.js",
     "private": false,
     "license": "MIT",
     "author": "holypower777",
     "type": "module",
+    "bin": {
+        "koslibs-lint": "./cli/lint.mjs"
+    },
     "scripts": {
         "lint": "npm run lint:js && npm run format:check",
         "lint:fix": "npm run lint:js --fix && npm run format",
-        "lint:js": "node ./cli/index.mjs js",
-        "format": "node ./cli/index.mjs format",
-        "format:check": "node ./cli/index.mjs format:check",
+        "lint:js": "node ./cli/lint.mjs js",
+        "format": "node ./cli/lint.mjs format",
+        "format:check": "node ./cli/lint.mjs format:check",
         "release": "changeset publish",
         "release:snapshot": "changeset publish --tag snapshot --no-git-tag",
         "version-package": "changeset version",
@@ -33,13 +36,18 @@
     "commitlint": {
         "extends": "./commitlint"
     },
-    "eslintConfig": {
-        "extends": "./eslint"
-    },
     "exports": {
+        ".": "./index.js",
         "./eslint": "./eslint/index.mjs",
+        "./eslint/config": "./eslint/config.mjs",
+        "./eslint/react": "./eslint/react.mjs",
+        "./playwright": "./playwright/index.mjs",
         "./prettier": "./prettier/index.js",
-        "./commitlint": "./commitlint/index.js"
+        "./commitlint": "./commitlint/index.js",
+        "./tsconfig": "./tsconfig/index.json",
+        "./tsconfig/base": "./tsconfig/base.json",
+        "./tsconfig/node": "./tsconfig/node.json",
+        "./vite": "./vite/index.mjs"
     },
     "dependencies": {
         "@commitlint/cli": "20.3.1",
