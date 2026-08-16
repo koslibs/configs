@@ -19,6 +19,7 @@
         "release": "changeset publish",
         "release:snapshot": "changeset publish --tag snapshot --no-git-tag",
         "version-package": "changeset version",
+        "version-package:patch": "npm version patch --no-git-tag-version",
         "version-package:snapshot": "changeset version --snapshot snapshot"
     },
     "bugs": {
