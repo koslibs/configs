@@ -13,6 +13,7 @@
         "eslint",
         "playwright",
         "prettier",
+        "rstest",
         "shared",
         "tsconfig",
         "vite",
@@ -60,6 +61,14 @@
         "./eslint/react": "./eslint/react.mjs",
         "./playwright": "./playwright/index.mjs",
         "./prettier": "./prettier/index.js",
+        "./rstest": {
+            "types": "./rstest/index.d.ts",
+            "default": "./rstest/index.mjs"
+        },
+        "./rstest/react": {
+            "types": "./rstest/react.d.ts",
+            "default": "./rstest/react.mjs"
+        },
         "./commitlint": "./commitlint/index.js",
         "./tsconfig": "./tsconfig/index.json",
         "./tsconfig/base": "./tsconfig/base.json",
@@ -67,24 +76,27 @@
         "./vite": "./vite/index.mjs"
     },
     "dependencies": {
-        "@commitlint/cli": "20.3.1",
         "@commitlint/config-conventional": "20.3.1",
-        "@eslint/eslintrc": "3.3.1",
         "@eslint/js": "9.36.0",
+        "@rsbuild/plugin-react": "2.1.1",
+        "@rstest/core": "0.12.2",
+        "@typescript-eslint/parser": "8.44.0",
         "eslint": "9.36.0",
         "eslint-config-prettier": "10.1.8",
         "eslint-plugin-import-helpers": "2.0.1",
         "eslint-plugin-prettier": "5.5.4",
         "eslint-plugin-storybook": "0.11.2",
         "globals": "16.4.0",
-        "lefthook": "2.0.13",
+        "happy-dom": "20.14.5",
         "prettier": "3.6.2",
         "typescript": "5.7.2",
         "typescript-eslint": "8.44.0"
     },
     "devDependencies": {
-        "@changesets/changelog-github": "^0.5.2",
-        "@changesets/cli": "^2.29.8",
-        "@types/node": "^24.4.0"
+        "@changesets/changelog-github": "0.5.2",
+        "@changesets/cli": "2.29.8",
+        "@commitlint/cli": "20.3.1",
+        "@types/node": "24.10.4",
+        "lefthook": "2.0.13"
     }
 }
