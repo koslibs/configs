@@ -6,9 +6,11 @@ const prettierParams =
     '"./**/*.{ts,tsx,js,jsx,mjs,cjs,css,json}" --no-error-on-unmatched-pattern --cache';
 
 const commandsMap = {
-    js: 'eslint .',
-    format: `prettier --write ${prettierParams} --list-different`,
-    'format:check': `prettier --check ${prettierParams}`,
+    lint: ['eslint .', `prettier --check ${prettierParams}`],
+    'lint:fix': ['eslint . --fix', `prettier --write ${prettierParams} --list-different`],
+    js: ['eslint .'],
+    format: [`prettier --write ${prettierParams} --list-different`],
+    'format:check': [`prettier --check ${prettierParams}`],
 };
 
 const possibleCommands = Object.keys(commandsMap);
@@ -21,11 +23,20 @@ if (!command || !possibleCommands.includes(command)) {
 }
 
 const args = process.argv.slice(3);
-const commandForExec = [commandsMap[command], ...args].join(' ');
 
-const { error } = spawnSync(commandForExec, { shell: true, stdio: ['pipe', 'inherit'] });
+for (const [index, step] of commandsMap[command].entries()) {
+    const commandForExec = [step, ...(index === 0 ? args : [])].join(' ');
+    const { error, status } = spawnSync(commandForExec, {
+        shell: true,
+        stdio: ['pipe', 'inherit'],
+    });
 
-if (error) {
-    console.error(error.message);
-    process.exit(error.exitCode);
+    if (error) {
+        console.error(error.message);
+        process.exit(1);
+    }
+
+    if (status !== 0) {
+        process.exit(status ?? 1);
+    }
 }
