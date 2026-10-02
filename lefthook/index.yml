@@ -14,3 +14,9 @@ commit-msg:
     commands:
         commitlint:
             run: npx --no-install commitlint --edit {1}
+
+pre-push:
+    commands:
+        changeset:
+            run: npx --no-install koslibs-release check --pre-push --remote {1}
+            use_stdin: true

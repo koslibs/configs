@@ -1,0 +1,81 @@
+name: Shared npm release
+
+on:
+    workflow_call:
+        inputs:
+            base-branch:
+                type: string
+                default: main
+            package-directory:
+                type: string
+                default: '.'
+            node-version:
+                type: string
+                default: '24.13.0'
+        secrets:
+            npm_token:
+                required: false
+            release_token:
+                required: false
+
+permissions:
+    contents: write
+    id-token: write
+
+concurrency:
+    group: npm-release-${{ github.repository }}-${{ inputs.base-branch }}
+    cancel-in-progress: false
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ${{ inputs.package-directory }}
+        env:
+            CI: true
+            LEFTHOOK: '0'
+            GITHUB_TOKEN: ${{ github.token }}
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ inputs.base-branch }}
+                  fetch-depth: 0
+                  token: ${{ secrets.release_token || github.token }}
+            - uses: actions/setup-node@v6
+              with:
+                  node-version: ${{ inputs.node-version }}
+                  registry-url: https://registry.npmjs.org
+                  package-manager-cache: false
+            - name: Install dependencies
+              run: npm ci
+            - name: Validate package
+              run: |
+                  npm run lint --if-present
+                  npm run typecheck --if-present
+                  npm run test --if-present
+            - name: Generate version and changelog
+              run: |
+                  npm run version-package
+                  npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+            - name: Commit release files
+              env:
+                  BASE_BRANCH: ${{ inputs.base-branch }}
+              run: |
+                  if git diff --quiet -- package.json package-lock.json CHANGELOG.md .changeset; then
+                    echo "No pending version changes; checking npm for an unpublished version."
+                    exit 0
+                  fi
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git add -- package.json package-lock.json CHANGELOG.md .changeset
+                  git commit -m "chore(release): version packages [skip ci]"
+                  git push origin "HEAD:$BASE_BRANCH"
+            - name: Publish to npm
+              run: npm run release
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+                  NPM_TOKEN: ${{ secrets.npm_token }}
+                  NPM_CONFIG_PROVENANCE: 'true'
+            - name: Push release tags
+              run: git push origin --tags

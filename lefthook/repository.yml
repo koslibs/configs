@@ -1,0 +1,6 @@
+# The configs repository runs its CLI from source before it is published.
+pre-push:
+    commands:
+        changeset:
+            run: node cli/release.js check --pre-push --remote {1}
+            use_stdin: true
