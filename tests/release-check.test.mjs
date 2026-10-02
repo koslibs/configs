@@ -204,6 +204,8 @@ test('checks packages in subdirectories even with git diff.relative enabled', (t
 
 test('installs manually configured hooks without rewriting YAML and enforces the policy during git push', (t) => {
     const repo = fixture(t);
+    // This test must exercise hooks even when the caller disables them for CI Git operations.
+    const hookEnv = { ...process.env, LEFTHOOK: '1' };
     const source = fileURLToPath(new URL('../', import.meta.url));
     repo.write(
         'package.json',
@@ -225,6 +227,7 @@ test('installs manually configured hooks without rewriting YAML and enforces the
         spawnSync(process.execPath, [checker, 'hooks:install'], {
             cwd: repo.root,
             encoding: 'utf8',
+            env: hookEnv,
         });
     assert.equal(install().status, 0);
     assert.equal(install().status, 0);
@@ -242,6 +245,7 @@ test('installs manually configured hooks without rewriting YAML and enforces the
             {
                 cwd: repo.root,
                 encoding: 'utf8',
+                env: hookEnv,
             }
         );
     const rejected = push();

@@ -32,7 +32,6 @@ jobs:
                 working-directory: ${{ inputs.package-directory }}
         env:
             CI: true
-            LEFTHOOK: '0'
             GITHUB_TOKEN: ${{ github.token }}
         steps:
             - uses: actions/checkout@v6

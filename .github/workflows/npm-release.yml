@@ -34,7 +34,6 @@ jobs:
                 working-directory: ${{ inputs.package-directory }}
         env:
             CI: true
-            LEFTHOOK: '0'
             GITHUB_TOKEN: ${{ github.token }}
         steps:
             - uses: actions/checkout@v6
@@ -61,6 +60,7 @@ jobs:
             - name: Commit release files
               env:
                   BASE_BRANCH: ${{ inputs.base-branch }}
+                  LEFTHOOK: '0'
               run: |
                   if git diff --quiet -- package.json package-lock.json CHANGELOG.md .changeset; then
                     echo "No pending version changes; checking npm for an unpublished version."
@@ -79,3 +79,5 @@ jobs:
                   NPM_CONFIG_PROVENANCE: 'true'
             - name: Push release tags
               run: git push origin --tags
+              env:
+                  LEFTHOOK: '0'
