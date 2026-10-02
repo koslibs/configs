@@ -1,0 +1,62 @@
+name: Shared npm snapshot
+
+on:
+    workflow_call:
+        inputs:
+            package-directory:
+                type: string
+                default: '.'
+            node-version:
+                type: string
+                default: '24.13.0'
+            tag:
+                type: string
+                default: snapshot
+        secrets:
+            npm_token:
+                required: false
+
+permissions:
+    contents: read
+    id-token: write
+
+concurrency:
+    group: npm-snapshot-${{ github.repository }}-${{ github.ref }}
+    cancel-in-progress: false
+
+jobs:
+    snapshot:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ${{ inputs.package-directory }}
+        env:
+            CI: true
+            LEFTHOOK: '0'
+            GITHUB_TOKEN: ${{ github.token }}
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v6
+              with:
+                  node-version: ${{ inputs.node-version }}
+                  registry-url: https://registry.npmjs.org
+                  package-manager-cache: false
+            - run: npm ci
+            - name: Validate package
+              run: |
+                  npm run lint --if-present
+                  npm run typecheck --if-present
+                  npm run test --if-present
+            - name: Version snapshot without committing
+              env:
+                  SNAPSHOT_TAG: ${{ inputs.tag }}
+              run: npm run version-package -- --snapshot "$SNAPSHOT_TAG"
+            - name: Publish snapshot without Git tags
+              env:
+                  SNAPSHOT_TAG: ${{ inputs.tag }}
+                  NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+                  NPM_TOKEN: ${{ secrets.npm_token }}
+                  NPM_CONFIG_PROVENANCE: 'true'
+              run: npm run release -- --tag "$SNAPSHOT_TAG" --no-git-tag

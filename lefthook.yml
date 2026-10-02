@@ -1,2 +1,4 @@
 extends:
     - ./lefthook/index.yml
+    - ./lefthook/repository.yml
+lefthook: node "cli/release.js" hooks:run

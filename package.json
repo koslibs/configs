@@ -19,10 +19,14 @@
         "vite",
         "index.js",
         "eslint.config.mjs",
-        "LICENSE"
+        "LICENSE",
+        "release",
+        "lefthook",
+        "README.md"
     ],
     "bin": {
-        "koslibs-lint": "cli/lint.js"
+        "koslibs-lint": "cli/lint.js",
+        "koslibs-release": "cli/release.js"
     },
     "scripts": {
         "lint": "node ./cli/lint.js lint",
@@ -31,11 +35,14 @@
         "lint:js:fix": "node ./cli/lint.js js --fix",
         "format": "node ./cli/lint.js format",
         "format:check": "node ./cli/lint.js format:check",
-        "release": "changeset publish",
-        "release:snapshot": "changeset publish --tag snapshot --no-git-tag",
-        "version-package": "changeset version",
-        "version-package:patch": "npm version patch --no-git-tag-version",
-        "version-package:snapshot": "changeset version --snapshot snapshot"
+        "release": "node ./cli/release.js publish",
+        "release:snapshot": "node ./cli/release.js publish --tag snapshot --no-git-tag",
+        "version-package": "node ./cli/release.js version",
+        "version-package:snapshot": "node ./cli/release.js version --snapshot snapshot",
+        "changeset": "node ./cli/release.js add",
+        "changeset:check": "node ./cli/release.js check",
+        "prepare": "node ./cli/release.js hooks:install",
+        "test": "node --test tests/*.test.mjs"
     },
     "bugs": {
         "url": "https://github.com/koslibs/configs/issues"
@@ -74,7 +81,10 @@
         "./tsconfig": "./tsconfig/index.json",
         "./tsconfig/base": "./tsconfig/base.json",
         "./tsconfig/node": "./tsconfig/node.json",
-        "./vite": "./vite/index.mjs"
+        "./vite": "./vite/index.mjs",
+        "./release": "./release/index.mjs",
+        "./changelog": "./release/changelog.mjs",
+        "./lefthook": "./lefthook/index.yml"
     },
     "dependencies": {
         "@commitlint/config-conventional": "20.3.1",
@@ -91,13 +101,14 @@
         "happy-dom": "20.14.5",
         "prettier": "3.6.2",
         "typescript": "5.7.2",
-        "typescript-eslint": "8.44.0"
-    },
-    "devDependencies": {
+        "typescript-eslint": "8.44.0",
         "@changesets/changelog-github": "0.5.2",
         "@changesets/cli": "2.29.8",
         "@commitlint/cli": "20.3.1",
-        "@types/node": "24.10.4",
-        "lefthook": "2.0.13"
+        "lefthook": "2.0.13",
+        "@changesets/parse": "0.4.3"
+    },
+    "devDependencies": {
+        "@types/node": "24.10.4"
     }
 }

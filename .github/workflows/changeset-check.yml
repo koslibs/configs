@@ -1,0 +1,40 @@
+name: Shared changeset check
+
+on:
+    workflow_call:
+        inputs:
+            package-directory:
+                type: string
+                default: '.'
+            node-version:
+                type: string
+                default: '24.13.0'
+
+permissions:
+    contents: read
+
+jobs:
+    check:
+        name: Changeset required
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ${{ inputs.package-directory }}
+        env:
+            CI: true
+            LEFTHOOK: '0'
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  fetch-depth: 0
+            - uses: actions/setup-node@v6
+              with:
+                  node-version: ${{ inputs.node-version }}
+                  package-manager-cache: false
+            - run: npm ci
+            - name: Require a committed changeset
+              env:
+                  BASE_SHA: ${{ github.event.pull_request.base.sha }}
+                  HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+              run: npm run changeset:check -- --base "$BASE_SHA" --head "$HEAD_SHA"
