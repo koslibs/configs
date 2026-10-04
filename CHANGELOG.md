@@ -1,5 +1,11 @@
 # @koslibs/configs
 
+## 1.0.0
+
+### Major Changes
+
+- [`2dbe778`](https://github.com/koslibs/configs/commit/2dbe7785a165ba042b8ffd3f3b79e18e3bfd78f8) Thanks [@holypower777](https://github.com/holypower777)! - Исправлены уязвимости
+
 ## 0.2.12
 
 ### Patch Changes
