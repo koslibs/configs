@@ -87,11 +87,15 @@
         "./lefthook": "./lefthook/index.yml"
     },
     "dependencies": {
+        "@changesets/changelog-github": "0.5.2",
+        "@changesets/cli": "3.0.3",
+        "@changesets/parse": "0.4.3",
+        "@commitlint/cli": "20.3.1",
         "@commitlint/config-conventional": "20.3.1",
         "@eslint/js": "9.36.0",
         "@rsbuild/plugin-react": "2.1.1",
         "@rstest/core": "0.12.2",
-        "@typescript-eslint/parser": "8.44.0",
+        "@typescript-eslint/parser": "8.71.0",
         "eslint": "9.36.0",
         "eslint-config-prettier": "10.1.8",
         "eslint-plugin-import-helpers": "2.0.1",
@@ -99,14 +103,10 @@
         "eslint-plugin-storybook": "0.11.2",
         "globals": "16.4.0",
         "happy-dom": "20.14.5",
+        "lefthook": "2.0.13",
         "prettier": "3.6.2",
         "typescript": "5.7.2",
-        "typescript-eslint": "8.44.0",
-        "@changesets/changelog-github": "0.5.2",
-        "@changesets/cli": "2.29.8",
-        "@commitlint/cli": "20.3.1",
-        "lefthook": "2.0.13",
-        "@changesets/parse": "0.4.3"
+        "typescript-eslint": "8.71.0"
     },
     "devDependencies": {
         "@types/node": "24.10.4"
