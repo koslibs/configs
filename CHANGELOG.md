@@ -1,5 +1,11 @@
 # @koslibs/configs
 
+## 1.0.1
+
+### Patch Changes
+
+- [`2cb7a66`](https://github.com/koslibs/configs/commit/2cb7a66a561ac91a468ce250ee7d3703d000d3b7) Thanks [@holypower777](https://github.com/holypower777)! - Fix the release test fixture for Changesets 3 on Windows by loading the changelog module through a file URL.
+
 ## 1.0.0
 
 ### Major Changes
