@@ -14,12 +14,12 @@ import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import test from 'node:test';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const checker = fileURLToPath(new URL('../cli/release.js', import.meta.url));
 
 const require = createRequire(import.meta.url);
-const changelog = require.resolve('@changesets/cli/changelog');
+const changelog = pathToFileURL(require.resolve('@changesets/cli/changelog')).href;
 const validChangeset = "---\n'@koslibs/api': patch\n---\n\nDescribe a package change.\n";
 
 const fixture = (t) => {
@@ -155,7 +155,7 @@ test('changeset version generates changelog entries and consumes pending changes
         cwd: repo.root,
         encoding: 'utf8',
     });
-    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
     const pkg = JSON.parse(readFileSync(join(repo.root, 'package.json'), 'utf8'));
     assert.equal(pkg.version, '0.1.7');
     const releaseChangelog = readFileSync(join(repo.root, 'CHANGELOG.md'), 'utf8');
