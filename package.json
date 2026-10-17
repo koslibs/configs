@@ -11,7 +11,6 @@
         "cli",
         "commitlint",
         "eslint",
-        "playwright",
         "prettier",
         "rstest",
         "shared",
@@ -67,7 +66,6 @@
         "./eslint": "./eslint/index.mjs",
         "./eslint/config": "./eslint/config.mjs",
         "./eslint/react": "./eslint/react.mjs",
-        "./playwright": "./playwright/index.mjs",
         "./prettier": "./prettier/index.js",
         "./rstest": {
             "types": "./rstest/index.d.ts",

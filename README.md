@@ -124,3 +124,12 @@ A manual snapshot caller can use `koslibs/configs/.github/workflows/npm-snapshot
 `koslibs-release add`, `init`, `status`, `version` and `publish` forward arguments to the bundled Changesets CLI. `check` accepts `--base`, `--head`, `--remote`, `--cwd` and `--pre-push`. `hooks:install` installs the shared Git hooks; `hooks:run` is their Lefthook bootstrap.
 
 No command publishes during installation. Run `npm run changeset` yourself to write the release description; the push hook checks it rather than opening an interactive prompt during Git operations.
+
+## Browser testing migration
+
+The Playwright preset and createPlaywrightConfig are now owned by @koslibs/playwright. The ./playwright subpath and root Playwright exports have been removed. Install @koslibs/playwright directly as a devDependency and import its configuration helpers.
+
+The reusable npm-release workflow accepts optional before-validation-command
+(default: empty). It runs after npm ci and before lint/type/test validation, for
+package-specific setup such as installing browser engines. Callers using this
+input must reference the configs 2 workflow tag.

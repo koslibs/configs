@@ -9,6 +9,9 @@ on:
             package-directory:
                 type: string
                 default: '.'
+            before-validation-command:
+                type: string
+                default: ''
             node-version:
                 type: string
                 default: '24.13.0'
@@ -48,6 +51,9 @@ jobs:
                   package-manager-cache: false
             - name: Install dependencies
               run: npm ci
+            - name: Prepare validation
+              if: inputs.before-validation-command != ''
+              run: ${{ inputs.before-validation-command }}
             - name: Validate package
               run: |
                   npm run lint --if-present
