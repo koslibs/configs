@@ -1,5 +1,13 @@
 # @koslibs/configs
 
+## 2.0.0
+
+### Major Changes
+
+- [`1afea90`](https://github.com/koslibs/configs/commit/1afea909430d14260765fcc58621c8e77950bfb3) Thanks [@holypower777](https://github.com/holypower777)! - Move the Playwright preset and createPlaywrightConfig to @koslibs/playwright. Remove the ./playwright subpath and root Playwright exports; consumers must import the independent browser-testing package.
+
+    Allow reusable release workflows to run an optional before-validation-command after dependency installation, so packages can prepare their test environment before lint/type/test validation.
+
 ## 1.0.1
 
 ### Patch Changes
