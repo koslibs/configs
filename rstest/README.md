@@ -15,7 +15,7 @@ export default createRstestConfig({
 
 ## React applications and component libraries
 
-The React plugin and `happy-dom` are included in `@koslibs/configs` dependencies.
+The React plugin and `jsdom` are included in `@koslibs/configs` dependencies.
 React and React DOM belong to the consuming project.
 
 ```js
@@ -30,6 +30,28 @@ export default createReactRstestConfig({
 The React preset enables JSX through the React plugin and uses a simulated DOM.
 It does not run browser, screenshot or Playwright tests. Keep their file patterns
 separate from unit tests using `include` / `exclude` in the consuming project.
+
+### Migration from Happy DOM
+
+The React preset now defaults to jsdom. Happy DOM is no longer installed because
+versions compatible with Rstest's peer dependency are affected by
+[GHSA-834v-8h66-3h79](https://github.com/advisories/GHSA-834v-8h66-3h79).
+The factory names and exports stay the same; DOM implementation differences can
+affect existing assertions. Replace uses of `window.happyDOM` and Happy DOM-specific
+setup with jsdom-compatible APIs. Remove explicit `testEnvironment: 'happy-dom'`
+overrides and migrate environment options to jsdom, for example:
+
+```js
+export default createReactRstestConfig({
+    testEnvironment: {
+        name: 'jsdom',
+        options: { url: 'https://example.test/' },
+    },
+});
+```
+
+jsdom 29.1.1 supports this package's Node 24.13.0 minimum. jsdom 30 requires a
+newer Node version, so it is not used here.
 
 For Testing Library, install `@testing-library/react` and
 `@testing-library/jest-dom` and create the optional setup file:
@@ -55,7 +77,7 @@ arrays append, and scalar values override. Additional React plugins append after
 the built-in React plugin. Paths are relative to the consuming project. Configure
 aliases, setup files, test patterns and coverage thresholds locally.
 
-Rstest, the React plugin and `happy-dom` are installed for every consumer, with
+Rstest, the React plugin and `jsdom` are installed for every consumer, with
 exact versions managed by `@koslibs/configs`. Import the React preset through
 `/rstest/react` explicitly. Package managers with strict dependency isolation may
 still require a direct `@rstest/core` dependency when tests import from it or

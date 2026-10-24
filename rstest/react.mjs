@@ -4,7 +4,7 @@ import { createRstestConfig } from './index.mjs';
 
 export const createReactRstestConfig = (overrides = {}) =>
     createRstestConfig({
-        testEnvironment: 'happy-dom',
+        testEnvironment: 'jsdom',
         ...overrides,
         plugins: [pluginReact(), ...(overrides.plugins ?? [])],
     });
