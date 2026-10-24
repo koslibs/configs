@@ -1,5 +1,18 @@
 # @koslibs/configs
 
+## 3.0.0
+
+### Major Changes
+
+- [`7c1f9bb`](https://github.com/koslibs/configs/commit/7c1f9bb5b655c36a7b14699a818fb0f9225dc6b3) Thanks [@holypower777](https://github.com/holypower777)! - Replace the vulnerable happy-dom dependency with jsdom 29.1.1 and use jsdom as the
+  React Rstest preset's default DOM environment. This removes GHSA-834v-8h66-3h79
+  without violating Rstest's peer dependency requirements or raising the minimum
+  Node version.
+
+    The preset factories and exports are unchanged. Consumers using window.happyDOM,
+    an explicit happy-dom environment or Happy DOM-specific options must migrate to
+    jsdom. See the Rstest preset documentation for the new environment options.
+
 ## 2.0.0
 
 ### Major Changes
